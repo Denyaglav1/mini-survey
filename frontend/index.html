@@ -3,12 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Мини-анкета</title>
+  <title>ВАЙБКОДИНГ-АНКЕТА</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #f0f2f5;
+      font-family: 'Space Mono', 'Courier New', monospace;
+      background: #f5f0e1;
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -17,97 +19,344 @@
     }
     .card {
       background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-      padding: 32px;
-      max-width: 520px;
+      border: 4px solid #000;
+      box-shadow: 12px 12px 0 #000;
+      padding: 40px;
+      max-width: 620px;
       width: 100%;
     }
     h1 {
-      font-size: 24px;
-      margin-bottom: 24px;
-      color: #1a1a2e;
+      font-size: 32px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: -1px;
+      margin-bottom: 4px;
+      color: #000;
+      line-height: 1.1;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: #000;
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-bottom: 4px solid #000;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
     .question {
-      margin-bottom: 20px;
+      margin-bottom: 28px;
     }
-    .question label {
+    .question-label {
       display: block;
       font-size: 14px;
-      font-weight: 600;
-      color: #333;
-      margin-bottom: 6px;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
     .question input[type="text"],
     .question input[type="number"] {
       width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #d0d5dd;
-      border-radius: 8px;
-      font-size: 15px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .question input:focus {
-      border-color: #5a8cff;
-    }
-    .question select {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #d0d5dd;
-      border-radius: 8px;
-      font-size: 15px;
-      background: #fff;
-      outline: none;
-    }
-    button {
-      margin-top: 8px;
-      width: 100%;
-      padding: 12px;
-      background: #5a8cff;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
+      padding: 12px 14px;
+      border: 3px solid #000;
+      border-radius: 0;
       font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
+      font-family: 'Space Mono', 'Courier New', monospace;
+      outline: none;
+      background: #fff;
+      transition: all 0.1s;
     }
-    button:hover { background: #4a7ae8; }
-    button:disabled { background: #b0c4ff; cursor: not-allowed; }
+    .question input[type="text"]:focus,
+    .question input[type="number"]:focus {
+      background: #CDFF50;
+      box-shadow: 6px 6px 0 #000;
+    }
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .radio-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 14px;
+      border: 3px solid #000;
+      border-bottom: none;
+      cursor: pointer;
+      transition: all 0.1s;
+      background: #fff;
+    }
+    .radio-option:last-child {
+      border-bottom: 3px solid #000;
+    }
+    .radio-option:hover {
+      background: #CDFF50;
+    }
+    .radio-option:has(input:checked) {
+      background: #000;
+      color: #CDFF50;
+    }
+    .radio-option:has(input:checked) span {
+      color: #CDFF50;
+    }
+    .radio-option input[type="radio"] {
+      margin-top: 3px;
+      accent-color: #000;
+      width: 16px;
+      height: 16px;
+    }
+    .radio-option span {
+      font-size: 13px;
+      color: #000;
+      line-height: 1.4;
+      font-family: 'Space Mono', 'Courier New', monospace;
+    }
+    button[type="submit"] {
+      margin-top: 16px;
+      width: 100%;
+      padding: 16px;
+      background: #000;
+      color: #CDFF50;
+      border: 4px solid #000;
+      font-size: 18px;
+      font-weight: 700;
+      font-family: 'Space Mono', 'Courier New', monospace;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.1s;
+      box-shadow: 6px 6px 0 #000;
+      position: relative;
+      top: 0;
+      left: 0;
+    }
+    button[type="submit"]:hover {
+      background: #CDFF50;
+      color: #000;
+      top: 3px;
+      left: 3px;
+      box-shadow: 3px 3px 0 #000;
+    }
+    button[type="submit"]:active {
+      top: 6px;
+      left: 6px;
+      box-shadow: 0 0 0 #000;
+    }
+    button[type="submit"]:disabled {
+      background: #999;
+      color: #ccc;
+      cursor: not-allowed;
+      box-shadow: 6px 6px 0 #666;
+    }
     .thank-you {
       text-align: center;
-      padding: 40px 0;
+      padding: 50px 0;
     }
     .thank-you h2 {
-      font-size: 28px;
-      color: #22c55e;
-      margin-bottom: 12px;
+      font-size: 36px;
+      color: #000;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: -1px;
     }
     .thank-you p {
-      color: #666;
-      font-size: 15px;
+      color: #000;
+      font-size: 14px;
+    }
+    .thank-you .counter {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 8px 16px;
+      background: #000;
+      color: #CDFF50;
+      font-weight: 700;
+      font-size: 13px;
+      text-transform: uppercase;
     }
     .error {
-      color: #ef4444;
-      font-size: 14px;
+      color: #000;
+      background: #FF6B6B;
+      font-size: 13px;
+      font-weight: 700;
       margin-top: 12px;
+      padding: 10px 14px;
+      border: 3px solid #000;
+      text-transform: uppercase;
+      display: none;
     }
     .loading {
       text-align: center;
-      padding: 40px 0;
-      color: #888;
+      padding: 50px 0;
+      color: #000;
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .hint {
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 0;
+      padding: 8px 14px;
+      background: #FFE566;
+      color: #000;
+      border: 3px solid #000;
+      border-top: none;
+      display: none;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      animation: brutalIn 0.15s ease;
+    }
+    .hint.roast {
+      background: #FF6B6B;
+      color: #000;
+    }
+    .hint.chill {
+      background: #CDFF50;
+      color: #000;
+    }
+    .hint.sus {
+      background: #FF8C42;
+      color: #000;
+    }
+    @keyframes brutalIn {
+      from { opacity: 0; transform: translateX(-8px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* Decorative corner marks */
+    .card::before {
+      content: '[ FORM_v2.0 ]';
+      position: absolute;
+      top: -24px;
+      left: 0;
+      font-size: 11px;
+      font-weight: 700;
+      color: #000;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-family: 'Space Mono', 'Courier New', monospace;
+    }
+    .card {
+      position: relative;
+    }
+
+    /* Number badge for questions */
+    .q-number {
+      display: inline-block;
+      background: #000;
+      color: #CDFF50;
+      width: 28px;
+      height: 28px;
+      text-align: center;
+      line-height: 28px;
+      font-size: 14px;
+      font-weight: 700;
+      margin-right: 8px;
+      flex-shrink: 0;
+    }
+    .question-label {
+      display: flex;
+      align-items: flex-start;
+    }
+    .q-text {
+      padding-top: 4px;
     }
   </style>
 </head>
 <body>
   <div class="card" id="app">
-    <div class="loading">Загрузка вопросов...</div>
+    <div class="loading">/// Загрузка вопросов...</div>
   </div>
 
   <script>
     const API_URL = 'http://localhost:8000';
     const app = document.getElementById('app');
+
+    // ── Шутливые валидации ──────────────────────────────────────────────────
+    function getNameHint(value) {
+      const v = value.trim();
+      if (!v) return null;
+      if (v.length === 1) return { text: '> Одна буква? Что-то я не уверен...', cls: '' };
+      if (v.length <= 2) return { text: '> Серьёзно? Что-то я не уверен, что это имя...', cls: '' };
+      if (/^[A-Z]/.test(v) && /[a-z]/.test(v) && v.length > 10) return { text: '> Что-то я не уверен... Это имя или название стартапа?', cls: '' };
+      if (/^\d+$/.test(v)) return { text: '> Что-то я не уверен, что числа — это имя. Хотя Илон назвал ребёнка X AE A-12...', cls: '' };
+      if (v.toLowerCase() === 'admin' || v.toLowerCase() === 'root') return { text: '> Что-то я не уверен... Ты случайно не в терминал пишешь?', cls: 'sus' };
+      if (v.length > 20) return { text: '> Что-то я не уверен, что это влезет в Figma...', cls: '' };
+      return { text: `> Окей, ${v}. Что-то я не уверен, но допустим!`, cls: 'chill' };
+    }
+
+    function getAgeHint(value) {
+      const age = parseInt(value);
+      if (isNaN(age)) return null;
+      if (age < 0) return { text: '> Ещё не родился, но уже на анкете? Уважаем.', cls: 'roast' };
+      if (age <= 12) return { text: '> Поколение Альфа! Ты, наверное, в Roblox уже деплоишь.', cls: 'chill' };
+      if (age <= 19) return { text: '> Понятно — зумер. TikTok-туториалы по CSS — твоя школа.', cls: '' };
+      if (age <= 27) return { text: '> Понятно — зумер со стажем. «Я учил React, когда это ещё было модно.»', cls: '' };
+      if (age <= 35) return { text: '> Понятно — миллениал. Помнишь jQuery? Вижу слезу.', cls: '' };
+      if (age <= 45) return { text: '> Понятно — миллениал-олд. Ты ещё верстал таблицами, признавайся.', cls: '' };
+      if (age <= 55) return { text: '> Понятно — поколение X. «Когда я начинал, CSS ещё не придумали.»', cls: '' };
+      if (age <= 70) return { text: '> Понятно — бумер. Ты помнишь интернет по модему? Ты — легенда.', cls: 'chill' };
+      if (age <= 100) return { text: '> Понятно — мудрец. Ты видел рождение HTML. Поклон.', cls: 'chill' };
+      return { text: '> Либо ты бессмертный, либо кое-кто привирает...', cls: 'roast' };
+    }
+
+    function getExpHint(value) {
+      const years = parseInt(value);
+      if (isNaN(years)) return null;
+      if (years === 0) return { text: '> Честно! Вайбкодинг — это нулевой опыт с макс. продуктивностью.', cls: 'chill' };
+      if (years === 1) return { text: '> Один год? Для дизайнера — уже подвиг. Горжусь!', cls: 'chill' };
+      if (years === 2) return { text: '> Два года — пограничная зона. Пока верю...', cls: '' };
+      if (years <= 5) return { text: '> НАМ-ТО НЕ ГОНИ! Дизайнер с ' + years + '-летним опытом? Подозрительно.', cls: 'sus' };
+      if (years <= 10) return { text: '> НАМ-ТО НЕ ГОНИ! ' + years + ' лет?! Ты фуллстек в маскировке!', cls: 'sus' };
+      if (years <= 20) return { text: '> НАМ-ТО НЕ ГОНИ! ' + years + ' лет — ты Senior Dev, притворяющийся дизайнером!', cls: 'roast' };
+      return { text: '> НАМ-ТО НЕ ГОНИ! ' + years + ' лет?! Ты сам Тим Бернерс-Ли что ли?!', cls: 'roast' };
+    }
+
+    function getVibeHint(value) {
+      const level = parseInt(value);
+      if (isNaN(level)) return null;
+      if (level <= 0) return { text: '> Анти-вайб. Ты удаляешь чужой код взглядом?', cls: 'roast' };
+      if (level <= 2) return { text: '> Уровень «открыл терминал — закрыл терминал». Прогресс!', cls: '' };
+      if (level <= 4) return { text: '> Уровень «копирую из ChatGPT и молюсь». Классика.', cls: '' };
+      if (level <= 6) return { text: '> Золотая середина. Опасен, но не деплоишь в прод по пятницам.', cls: 'chill' };
+      if (level <= 8) return { text: '> А ты точно дизайнер? Подозрительно высокий вайб.', cls: 'sus' };
+      if (level <= 10) return { text: '> ДЕПЛОЮ ВЗГЛЯДОМ. Легенда. Или врёшь. Или оба варианта.', cls: 'roast' };
+      return { text: '> Шкала до 10, но у вайба нет потолка.', cls: 'roast' };
+    }
+
+    const VALIDATORS = {
+      1: getNameHint,
+      2: getAgeHint,
+      6: getExpHint,
+      7: getVibeHint,
+    };
+
+    function attachHintListeners() {
+      Object.entries(VALIDATORS).forEach(([qid, fn]) => {
+        const input = document.getElementById(`q${qid}`);
+        const hintEl = document.getElementById(`hint${qid}`);
+        if (!input || !hintEl) return;
+
+        const handler = () => {
+          const result = fn(input.value);
+          if (result) {
+            hintEl.textContent = result.text;
+            hintEl.className = 'hint' + (result.cls ? ' ' + result.cls : '');
+            hintEl.style.display = 'block';
+          } else {
+            hintEl.style.display = 'none';
+          }
+        };
+
+        input.addEventListener('input', handler);
+        input.addEventListener('change', handler);
+      });
+    }
+
+    // ── Рендеринг формы ─────────────────────────────────────────────────────
 
     async function loadQuestions() {
       try {
@@ -115,39 +364,51 @@
         const data = await res.json();
         renderForm(data.questions);
       } catch (err) {
-        app.innerHTML = `<div class="error">Не удалось загрузить вопросы. Убедитесь, что backend запущен на ${API_URL}</div>`;
+        app.innerHTML = `<div class="error" style="display:block">/// ERR: Не удалось загрузить вопросы. Backend не отвечает на ${API_URL}</div>`;
       }
     }
 
     function renderForm(questions) {
-      let html = '<h1>Мини-анкета</h1><form id="survey-form">';
+      let html = '<h1>Вайбкодинг-<br>анкета</h1>';
+      html += '<p class="subtitle">/// Честный опрос для дизайнеров, которые решили «немного покодить»</p>';
+      html += '<form id="survey-form">';
 
       questions.forEach(q => {
         html += `<div class="question">`;
-        html += `<label for="q${q.id}">${q.id}. ${q.text}</label>`;
+        html += `<span class="question-label"><span class="q-number">${q.id}</span><span class="q-text">${q.text}</span></span>`;
 
         if (q.type === 'choice' && q.options) {
-          html += `<select id="q${q.id}" data-qid="${q.id}" required>`;
-          html += `<option value="">Выберите...</option>`;
-          q.options.forEach(opt => {
-            html += `<option value="${opt}">${opt}</option>`;
+          html += `<div class="radio-group">`;
+          q.options.forEach((opt, i) => {
+            const inputId = `q${q.id}_${i}`;
+            html += `<label class="radio-option" for="${inputId}">`;
+            html += `<input type="radio" id="${inputId}" name="q${q.id}" data-qid="${q.id}" value="${opt}" required>`;
+            html += `<span>${opt}</span>`;
+            html += `</label>`;
           });
-          html += `</select>`;
+          html += `</div>`;
         } else if (q.type === 'number') {
-          html += `<input type="number" id="q${q.id}" data-qid="${q.id}" required min="1" max="100">`;
+          const isAge = q.text.toLowerCase().includes('сколько вам лет');
+          const isExp = q.text.toLowerCase().includes('программируете');
+          let min = '1', max = '10', placeholder = '/// от 1 до 10';
+          if (isAge) { min = '1'; max = '150'; placeholder = '/// ваш возраст'; }
+          if (isExp) { min = '0'; max = '50'; placeholder = '/// лет опыта'; }
+          html += `<input type="number" id="q${q.id}" data-qid="${q.id}" required min="${min}" max="${max}" placeholder="${placeholder}">`;
         } else {
-          html += `<input type="text" id="q${q.id}" data-qid="${q.id}" required>`;
+          html += `<input type="text" id="q${q.id}" data-qid="${q.id}" required placeholder="/// ваш ответ">`;
         }
 
+        html += `<div class="hint" id="hint${q.id}"></div>`;
         html += `</div>`;
       });
 
-      html += '<button type="submit">Отправить</button>';
-      html += '<div id="form-error" class="error" style="display:none"></div>';
+      html += '<button type="submit">[ Отправить вайб ]</button>';
+      html += '<div id="form-error" class="error"></div>';
       html += '</form>';
       app.innerHTML = html;
 
       document.getElementById('survey-form').addEventListener('submit', handleSubmit);
+      attachHintListeners();
     }
 
     async function handleSubmit(e) {
@@ -156,16 +417,19 @@
       const errDiv = document.getElementById('form-error');
       errDiv.style.display = 'none';
       btn.disabled = true;
-      btn.textContent = 'Отправка...';
+      btn.textContent = '[ Отправляем... ]';
 
-      const inputs = e.target.querySelectorAll('[data-qid]');
       const answers = [];
-      inputs.forEach(input => {
-        answers.push({
-          question_id: parseInt(input.dataset.qid),
-          answer: input.value
-        });
+
+      e.target.querySelectorAll('input[type="text"][data-qid], input[type="number"][data-qid]').forEach(input => {
+        answers.push({ question_id: parseInt(input.dataset.qid), answer: input.value });
       });
+
+      e.target.querySelectorAll('input[type="radio"]:checked').forEach(input => {
+        answers.push({ question_id: parseInt(input.dataset.qid), answer: input.value });
+      });
+
+      answers.sort((a, b) => a.question_id - b.question_id);
 
       try {
         const res = await fetch(`${API_URL}/answers`, {
@@ -178,18 +442,18 @@
         if (data.status === 'ok') {
           app.innerHTML = `
             <div class="thank-you">
-              <h2>Спасибо!</h2>
-              <p>Ваши ответы успешно сохранены.</p>
-              <p style="margin-top:8px;color:#999;font-size:13px">Всего ответов: ${data.total_responses}</p>
+              <h2>Спасибо за<br>честность!</h2>
+              <p>Ваши вайб-ответы сохранены в бездне backend'а.</p>
+              <span class="counter">/// Всего прошли анкету: ${data.total_responses}</span>
             </div>`;
         } else {
           throw new Error('Unexpected response');
         }
       } catch (err) {
-        errDiv.textContent = 'Ошибка при отправке. Попробуйте ещё раз.';
+        errDiv.textContent = '/// ERR: Ошибка при отправке. Попробуйте ещё раз.';
         errDiv.style.display = 'block';
         btn.disabled = false;
-        btn.textContent = 'Отправить';
+        btn.textContent = '[ Отправить вайб ]';
       }
     }
 
