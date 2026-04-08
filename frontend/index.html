@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Мини-анкета</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f0f2f5;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 16px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      padding: 32px;
+      max-width: 520px;
+      width: 100%;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 24px;
+      color: #1a1a2e;
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .question label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 6px;
+    }
+    .question input[type="text"],
+    .question input[type="number"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #d0d5dd;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .question input:focus {
+      border-color: #5a8cff;
+    }
+    .question select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #d0d5dd;
+      border-radius: 8px;
+      font-size: 15px;
+      background: #fff;
+      outline: none;
+    }
+    button {
+      margin-top: 8px;
+      width: 100%;
+      padding: 12px;
+      background: #5a8cff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover { background: #4a7ae8; }
+    button:disabled { background: #b0c4ff; cursor: not-allowed; }
+    .thank-you {
+      text-align: center;
+      padding: 40px 0;
+    }
+    .thank-you h2 {
+      font-size: 28px;
+      color: #22c55e;
+      margin-bottom: 12px;
+    }
+    .thank-you p {
+      color: #666;
+      font-size: 15px;
+    }
+    .error {
+      color: #ef4444;
+      font-size: 14px;
+      margin-top: 12px;
+    }
+    .loading {
+      text-align: center;
+      padding: 40px 0;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="card" id="app">
+    <div class="loading">Загрузка вопросов...</div>
+  </div>
+
+  <script>
+    const API_URL = 'http://localhost:8000';
+    const app = document.getElementById('app');
+
+    async function loadQuestions() {
+      try {
+        const res = await fetch(`${API_URL}/questions`);
+        const data = await res.json();
+        renderForm(data.questions);
+      } catch (err) {
+        app.innerHTML = `<div class="error">Не удалось загрузить вопросы. Убедитесь, что backend запущен на ${API_URL}</div>`;
+      }
+    }
+
+    function renderForm(questions) {
+      let html = '<h1>Мини-анкета</h1><form id="survey-form">';
+
+      questions.forEach(q => {
+        html += `<div class="question">`;
+        html += `<label for="q${q.id}">${q.id}. ${q.text}</label>`;
+
+        if (q.type === 'choice' && q.options) {
+          html += `<select id="q${q.id}" data-qid="${q.id}" required>`;
+          html += `<option value="">Выберите...</option>`;
+          q.options.forEach(opt => {
+            html += `<option value="${opt}">${opt}</option>`;
+          });
+          html += `</select>`;
+        } else if (q.type === 'number') {
+          html += `<input type="number" id="q${q.id}" data-qid="${q.id}" required min="1" max="100">`;
+        } else {
+          html += `<input type="text" id="q${q.id}" data-qid="${q.id}" required>`;
+        }
+
+        html += `</div>`;
+      });
+
+      html += '<button type="submit">Отправить</button>';
+      html += '<div id="form-error" class="error" style="display:none"></div>';
+      html += '</form>';
+      app.innerHTML = html;
+
+      document.getElementById('survey-form').addEventListener('submit', handleSubmit);
+    }
+
+    async function handleSubmit(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button');
+      const errDiv = document.getElementById('form-error');
+      errDiv.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Отправка...';
+
+      const inputs = e.target.querySelectorAll('[data-qid]');
+      const answers = [];
+      inputs.forEach(input => {
+        answers.push({
+          question_id: parseInt(input.dataset.qid),
+          answer: input.value
+        });
+      });
+
+      try {
+        const res = await fetch(`${API_URL}/answers`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ answers })
+        });
+        const data = await res.json();
+
+        if (data.status === 'ok') {
+          app.innerHTML = `
+            <div class="thank-you">
+              <h2>Спасибо!</h2>
+              <p>Ваши ответы успешно сохранены.</p>
+              <p style="margin-top:8px;color:#999;font-size:13px">Всего ответов: ${data.total_responses}</p>
+            </div>`;
+        } else {
+          throw new Error('Unexpected response');
+        }
+      } catch (err) {
+        errDiv.textContent = 'Ошибка при отправке. Попробуйте ещё раз.';
+        errDiv.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Отправить';
+      }
+    }
+
+    loadQuestions();
+  </script>
+</body>
+</html>
